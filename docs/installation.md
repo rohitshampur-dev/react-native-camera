@@ -10,7 +10,7 @@ This document is split into two main sections:
 
 # Required installation steps
 
-_These steps assume installation for iOS/Android. To install it with Windows, see [Windows](#windows) below_
+_These steps assume installation for iOS/Android. To install it with Windows, see manual install [below](#windows)_
 
 ## Mostly automatic install with autolinking (RN > 0.60)
 
@@ -284,8 +284,8 @@ apply plugin: 'com.google.gms.google-services'
 <application ...>
 ...
   <meta-data
-      android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-      android:value="ocr, face" /> <!-- choose models that you will use -->
+      android:name="com.google.mlkit.vision.DEPENDENCIES"
+      android:value="ocr" /> <!-- choose models that you will use -->
 </application>
 ```
 
@@ -430,14 +430,9 @@ ext {
 
 # Windows
 
-## Mostly automatic install with autolinking (RNW >= 0.63)
+## Manual linking for RNW 0.62
 
-1. `npm install react-native-camera --save`
-2. See [Additional steps - Windows](#additional-steps-windows) below
-
-## Manual install - Windows (RNW 0.62)
-
-1. `npm install react-native-camera --save`
+1. `yarn install react-native-camera`
 2. Link the library as described below:
    1. Add the _ReactNativeCameraCPP_ project to your solution (eg. `windows\yourapp.sln`)
       1. Open your solution in Visual Studio 2019
@@ -452,17 +447,11 @@ ext {
       1. Add `#include "winrt/ReactNativeCameraCPP.h"`
    2. `App.cpp`
       1. Add `PackageProviders().Append(winrt::ReactNativeCameraCPP::ReactPackageProvider());` before `InitializeComponent();`
-4. See [Additional steps - Windows](#additional-steps-windows) below
+4. Add the capabilities (permissions) for the webcam and microphone as described here: [Add capability declarations to the app manifest](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/simple-camera-preview-access#add-capability-declarations-to-the-app-manifest)
+5. If you plan on capturing images to the Pictures Library, or videos to the Videos Library, be sure to enable those capabilities too
 
-## Manual install - Windows (RNW 0.61)
+## Manual linking for RNW 0.61
 
-Follow [Manual install - Windows (RNW 0.62)](#manual-install-windows-rnw-062) above, but for step 2 substitute _ReactNativeCameraCPP61_ for _ReactNativeCameraCPP_.
-
-## Additional steps - Windows
-
-You need to declare that your app wants to access the camera:
-
-1. Add the capabilities (permissions) for the webcam and microphone as described here: [Add capability declarations to the app manifest](https://docs.microsoft.com/en-us/windows/uwp/audio-video-camera/simple-camera-preview-access#add-capability-declarations-to-the-app-manifest)
-2. If you plan on capturing images to the Pictures Library, or videos to the Videos Library, be sure to enable those capabilities too
+Follow the same manual steps for RNW 0.62 above, but for step 2 substitute _ReactNativeCameraCPP61_ for _ReactNativeCameraCPP_.
 
 Follow the [Q & A](QA.md) section if you are having compilation issues.
