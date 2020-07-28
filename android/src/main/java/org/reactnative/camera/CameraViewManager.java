@@ -212,6 +212,11 @@ public class CameraViewManager extends ViewGroupManager<RNCameraView> {
     view.setShouldRecognizeText(textRecognizerEnabled);
   }
 
+  @ReactProp(name = "labelDetectorEnabled")
+  public void setLabelDetecting(RNCameraView view, boolean labelDetectorEnabled) {
+    view.setShouldDetectLabels(labelDetectorEnabled);
+  }
+
   /**---limit scan area addition---**/
   @ReactProp(name = "rectOfInterest")
   public void setRectOfInterest(RNCameraView view, ReadableMap coordinates) {

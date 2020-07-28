@@ -222,6 +222,11 @@ type Phone = {
   phoneType?: 'UNKNOWN' | 'Work' | 'Home' | 'Fax' | 'Mobile',
 };
 
+type ImageLabel = {
+  text: string;
+  confidence: number;
+}
+
 type RecordingOptions = {
   maxDuration?: number,
   maxFileSize?: number,
@@ -279,6 +284,7 @@ type PropsType = typeof View.props & {
   faceDetectionClassifications?: number,
   onFacesDetected?: ({ faces: Array<TrackedFaceFeature> }) => void,
   onTextRecognized?: ({ textBlocks: Array<TrackedTextFeature> }) => void,
+  onLabelsDetected?: ({ labels: Array<ImageLabel> }) => void,
   captureAudio?: boolean,
   keepAudioSession?: boolean,
   useCamera2Api?: boolean,
@@ -837,6 +843,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
             onBarCodeRead={this._onObjectDetected(this.props.onBarCodeRead)}
             onTouch={this._onTouch}
             onFacesDetected={this._onObjectDetected(this.props.onFacesDetected)}
+            onLabelsRecognized={this._onObjectDetected(this.props.onTextRecognized)}
             onTextRecognized={this._onObjectDetected(this.props.onTextRecognized)}
             onPictureSaved={this._onPictureSaved}
             onSubjectAreaChanged={this._onSubjectAreaChanged}
@@ -864,6 +871,10 @@ export default class Camera extends React.Component<PropsType, StateType> {
 
     if (props.onFacesDetected) {
       newProps.faceDetectorEnabled = true;
+    }
+
+    if (props.onLabelsDetected) {
+      newProps.labelDetectorEnabled = true;
     }
 
     if (props.onTap || props.onDoubleTap) {
@@ -902,6 +913,7 @@ const RNCamera = requireNativeComponent('RNCamera', Camera, {
     googleVisionBarcodeDetectorEnabled: true,
     faceDetectorEnabled: true,
     textRecognizerEnabled: true,
+    labelDetectorEnabled: true,
     importantForAccessibility: true,
     onBarCodeRead: true,
     onGoogleVisionBarcodesDetected: true,
@@ -910,6 +922,7 @@ const RNCamera = requireNativeComponent('RNCamera', Camera, {
     onAudioConnected: true,
     onPictureSaved: true,
     onFaceDetected: true,
+    onLabelsDetected: true,
     onTouch: true,
     onLayout: true,
     onMountError: true,

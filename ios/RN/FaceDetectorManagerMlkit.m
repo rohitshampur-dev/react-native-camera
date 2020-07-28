@@ -1,6 +1,6 @@
 #import "FaceDetectorManagerMlkit.h"
 #import <React/RCTConvert.h>
-#if __has_include(<FirebaseMLVision/FirebaseMLVision.h>)
+// #if __has_include(<FirebaseMLVision/FirebaseMLVision.h>)
 
 @interface FaceDetectorManagerMlkit ()
 @property(nonatomic, strong) MLKFaceDetector *faceRecognizer;
@@ -267,59 +267,59 @@
 }
 
 @end
-#else
+// #else
 
-@interface FaceDetectorManagerMlkit ()
-@end
+// @interface FaceDetectorManagerMlkit ()
+// @end
 
-@implementation FaceDetectorManagerMlkit
+// @implementation FaceDetectorManagerMlkit
 
-- (instancetype)init {
-    self = [super init];
-    return self;
-}
+// - (instancetype)init {
+//     self = [super init];
+//     return self;
+// }
 
-- (BOOL)isRealDetector {
-    return false;
-}
+// - (BOOL)isRealDetector {
+//     return false;
+// }
 
-- (NSArray *)findFacesInFrame:(UIImage *)image
-                       scaleX:(float)scaleX
-                       scaleY:(float)scaleY
-                       completed:(void (^)(NSArray *result))completed;
-{
-    NSLog(@"FaceDetector not installed, stub used!");
-    NSArray *features = @[ @"Error, Face Detector not installed" ];
-    return features;
-}
+// - (NSArray *)findFacesInFrame:(UIImage *)image
+//                        scaleX:(float)scaleX
+//                        scaleY:(float)scaleY
+//                        completed:(void (^)(NSArray *result))completed;
+// {
+//     NSLog(@"FaceDetector not installed, stub used!");
+//     NSArray *features = @[ @"Error, Face Detector not installed" ];
+//     return features;
+// }
 
-- (void)setTracking:(id)json:(dispatch_queue_t)sessionQueue 
-{
-    return;
-}
-- (void)setLandmarksMode:(id)json:(dispatch_queue_t)sessionQueue 
-{
-    return;
-}
+// - (void)setTracking:(id)json:(dispatch_queue_t)sessionQueue 
+// {
+//     return;
+// }
+// - (void)setLandmarksMode:(id)json:(dispatch_queue_t)sessionQueue 
+// {
+//     return;
+// }
 
-- (void)setPerformanceMode:(id)json:(dispatch_queue_t)sessionQueue 
-{
-    return;
-}
+// - (void)setPerformanceMode:(id)json:(dispatch_queue_t)sessionQueue 
+// {
+//     return;
+// }
 
-- (void)setClassificationMode:(id)json:(dispatch_queue_t)sessionQueue 
-{
-    return;
-}
+// - (void)setClassificationMode:(id)json:(dispatch_queue_t)sessionQueue 
+// {
+//     return;
+// }
 
-+ (NSDictionary *)constantsToExport
-{
-    return @{
-             @"Mode" : @{},
-             @"Landmarks" : @{},
-             @"Classifications" : @{}
-             };
-}
+// + (NSDictionary *)constantsToExport
+// {
+//     return @{
+//              @"Mode" : @{},
+//              @"Landmarks" : @{},
+//              @"Classifications" : @{}
+//              };
+// }
 
-@end
-#endif
+// @end
+// #endif

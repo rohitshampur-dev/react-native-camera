@@ -333,6 +333,12 @@ RCT_CUSTOM_VIEW_PROPERTY(textRecognizerEnabled, BOOL, RNCamera)
     [view setupOrDisableTextDetector];
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(labelDetectorEnabled, BOOL, RNCamera)
+{
+    view.canDetectLabels = [RCTConvert BOOL:json];
+    [view setupOrDisableLabelDetector];
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(captureAudio, BOOL, RNCamera)
 {
     [view setCaptureAudio:[RCTConvert BOOL:json]];
