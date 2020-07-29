@@ -239,6 +239,7 @@ export interface RNCameraProps {
   trackingEnabled?: boolean;
 
   onTextRecognized?(response: { textBlocks: TrackedTextFeature[] }): void;
+  onLabelsDetected?(response: { labels: ImageLabel[] }): void;
   // -- ANDROID ONLY PROPS
   /** Android only */
   ratio?: string;
@@ -407,6 +408,11 @@ export interface TrackedTextFeatureRecursive {
 
 export interface TrackedTextFeature extends TrackedTextFeatureRecursive {
   components: TrackedTextFeatureRecursive[];
+}
+
+interface ImageLabel {
+  text: string;
+  confidence: number;
 }
 
 interface TakePictureOptions {
