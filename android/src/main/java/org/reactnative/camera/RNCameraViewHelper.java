@@ -20,6 +20,7 @@ import org.reactnative.camera.events.*;
 import org.reactnative.barcodedetector.RNBarcodeDetector;
 import org.reactnative.facedetector.RNFaceDetector;
 import org.reactnative.imagelabeler.RNImageLabeler;
+import org.reactnative.objectdetector.RNObjectDetector;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -348,6 +349,7 @@ public class RNCameraViewHelper {
       }
     });
   }
+  
 
   public static void emitImageLabelingErrorEvent(final ViewGroup view, final RNImageLabeler imageLabeler) {
 
@@ -356,6 +358,31 @@ public class RNCameraViewHelper {
       @Override
       public void run() {
         LabelDetectionErrorEvent event = LabelDetectionErrorEvent.obtain(view.getId(), imageLabeler);
+        reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher().dispatchEvent(event);
+      }
+    });
+  }
+
+  /** Object Detection events */
+  public static void emitObjectsDetectedEvent(final ViewGroup view, final WritableArray data) {
+
+    final ReactContext reactContext = (ReactContext) view.getContext();
+    reactContext.runOnNativeModulesQueueThread(new Runnable() {
+      @Override
+      public void run() {
+        ObjectsDetectedEvent event = ObjectsDetectedEvent.obtain(view.getId(), data);
+        reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher().dispatchEvent(event);
+      }
+    });
+  }
+
+  public static void emitObjectDetectionErrorEvent(final ViewGroup view, final RNObjectDetector objectDetector) {
+
+    final ReactContext reactContext = (ReactContext) view.getContext();
+    reactContext.runOnNativeModulesQueueThread(new Runnable() {
+      @Override
+      public void run() {
+        ObjectDetectionErrorEvent event = ObjectDetectionErrorEvent.obtain(view.getId(), objectDetector);
         reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher().dispatchEvent(event);
       }
     });

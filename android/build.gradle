@@ -78,4 +78,6 @@ dependencies {
   mlkitImplementation "com.google.mlkit:barcode-scanning:${safeExtGet('mlkit-barcode-scanning', '16.0.0')}"
   mlkitImplementation "com.google.mlkit:face-detection:${safeExtGet('mlkit-face-detection', '16.0.0')}"
   mlkitImplementation "com.google.mlkit:image-labeling:${safeExtGet('mlkit-image-labeling', '16.0.0')}"
+  mlkitImplementation "com.google.mlkit:object-detection:${safeExtGet('mlkit-object-detection', '16.0.0')}"
+
 }

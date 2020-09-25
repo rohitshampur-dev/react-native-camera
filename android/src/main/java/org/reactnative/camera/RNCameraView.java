@@ -31,6 +31,8 @@ import org.reactnative.camera.tasks.*;
 import org.reactnative.camera.utils.RNFileUtils;
 import org.reactnative.facedetector.RNFaceDetector;
 import org.reactnative.imagelabeler.RNImageLabeler;
+import org.reactnative.objectdetector.RNObjectDetector;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RNCameraView extends CameraView implements LifecycleEventListener, BarCodeScannerAsyncTaskDelegate, FaceDetectorAsyncTaskDelegate,
-    BarcodeDetectorAsyncTaskDelegate, TextRecognizerAsyncTaskDelegate, ImageLabelerAsyncTaskDelegate, PictureSavedDelegate {
+    BarcodeDetectorAsyncTaskDelegate, TextRecognizerAsyncTaskDelegate, ImageLabelerAsyncTaskDelegate, ObjectDetectorAsyncTaskDelegate, PictureSavedDelegate {
   private ThemedReactContext mThemedReactContext;
   private Queue<Promise> mPictureTakenPromises = new ConcurrentLinkedQueue<>();
   private Map<Promise, ReadableMap> mPictureTakenOptions = new ConcurrentHashMap<>();
@@ -66,18 +68,21 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
   public volatile boolean googleBarcodeDetectorTaskLock = false;
   public volatile boolean textRecognizerTaskLock = false;
   public volatile boolean imageLabelerTaskLock = false;
+  public volatile boolean objectDetectorTaskLock = false;
 
   // Scanning-related properties
   private MultiFormatReader mMultiFormatReader;
   private RNFaceDetector mFaceDetector;
   private RNBarcodeDetector mGoogleBarcodeDetector;
   private RNImageLabeler mImageLabeler;
+  private RNObjectDetector mObjectDetector;
   private boolean mShouldDetectFaces = false;
   private boolean mShouldGoogleDetectBarcodes = false;
   private boolean mShouldScanBarCodes = false;
   private boolean mShouldRecognizeText = false;
   private boolean mShouldDetectTouches = false;
   private boolean mShouldDetectLabels = false;
+  private boolean mShouldDetectObjects = false;
   private int mFaceDetectorMode = RNFaceDetector.FAST_MODE;
   private int mFaceDetectionLandmarks = RNFaceDetector.NO_LANDMARKS;
   private int mFaceDetectionClassifications = RNFaceDetector.NO_CLASSIFICATIONS;
@@ -583,7 +588,7 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
     googleBarcodeDetectorTaskLock = false;
   }
 
-    /**
+  /**
    * Initial setup of the image labeler
    */
   private void setupImageLabeler() {
@@ -595,7 +600,7 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
       setupImageLabeler();
     }
     this.mShouldDetectLabels = shouldDetectLabels;
-    setScanning(mShouldDetectFaces || mShouldGoogleDetectBarcodes || mShouldScanBarCodes || mShouldRecognizeText || mShouldDetectLabels);
+    setScanning(mShouldDetectFaces || mShouldGoogleDetectBarcodes || mShouldScanBarCodes || mShouldRecognizeText || mShouldDetectLabels || mShouldDetectObjects);
   }
 
   public void onLabelsDetected(WritableArray labelsDetected) {
@@ -617,6 +622,42 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
   public void onImageLabelingTaskCompleted() {
     imageLabelerTaskLock = false;
   }
+
+  /**
+   * Initial setup of the object detector
+   */
+  private void setupObjectDetector() {
+    mObjectDetector = new RNObjectDetector(mThemedReactContext);
+  }
+
+  public void setShouldDetectObjects(boolean shouldDetectObjects) {
+    if (shouldDetectObjects && mObjectDetector == null) {
+      setupObjectDetector();
+    }
+    this.mShouldDetectObjects = shouldDetectObjects;
+    setScanning(mShouldDetectFaces || mShouldGoogleDetectBarcodes || mShouldScanBarCodes || mShouldRecognizeText || mShouldDetectLabels || mShouldDetectObjects);
+  }
+
+  public void onObjectsDetected(WritableArray objectsDetected) {
+    if (!mShouldDetectObjects) {
+      return;
+    }
+    RNCameraViewHelper.emitObjectsDetectedEvent(this, objectsDetected);
+  }
+
+  public void onObjectDetectionError(RNObjectDetector objectDetector) {
+    if (!mShouldDetectObjects) {
+      return;
+    }
+
+    RNCameraViewHelper.emitObjectDetectionErrorEvent(this, objectDetector);
+  }
+
+  @Override
+  public void onObjectDetectionTaskCompleted() {
+    objectDetectorTaskLock = false;
+  }
+
 
   /**
    *
