@@ -54,6 +54,12 @@ Pod::Spec.new do |s|
     ss.dependency 'GoogleMLKit/ObjectDetection'
   end
 
+  s.subspec "PoseDetectorMLKit" do |ss|
+    ss.dependency 'react-native-camera/RN'
+    ss.dependency 'react-native-camera/RCT'
+    ss.dependency 'GoogleMLKit/PoseDetection'
+  end
+
   s.default_subspecs = "RN", "RCT"
 
   s.preserve_paths = 'LICENSE', 'README.md', 'package.json', 'index.js'

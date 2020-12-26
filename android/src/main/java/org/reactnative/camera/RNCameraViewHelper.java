@@ -21,6 +21,7 @@ import org.reactnative.barcodedetector.RNBarcodeDetector;
 import org.reactnative.facedetector.RNFaceDetector;
 import org.reactnative.imagelabeler.RNImageLabeler;
 import org.reactnative.objectdetector.RNObjectDetector;
+import org.reactnative.posedetector.RNPoseDetector;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -383,6 +384,31 @@ public class RNCameraViewHelper {
       @Override
       public void run() {
         ObjectDetectionErrorEvent event = ObjectDetectionErrorEvent.obtain(view.getId(), objectDetector);
+        reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher().dispatchEvent(event);
+      }
+    });
+  }
+
+  /** Pose Detection events */
+  public static void emitPoseDetectedEvent(final ViewGroup view, final WritableMap data) {
+
+    final ReactContext reactContext = (ReactContext) view.getContext();
+    reactContext.runOnNativeModulesQueueThread(new Runnable() {
+      @Override
+      public void run() {
+        PoseDetectedEvent event = PoseDetectedEvent.obtain(view.getId(), data);
+        reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher().dispatchEvent(event);
+      }
+    });
+  }
+
+  public static void emitPoseDetectionErrorEvent(final ViewGroup view, final RNPoseDetector poseDetector) {
+
+    final ReactContext reactContext = (ReactContext) view.getContext();
+    reactContext.runOnNativeModulesQueueThread(new Runnable() {
+      @Override
+      public void run() {
+        PoseDetectionErrorEvent event = PoseDetectionErrorEvent.obtain(view.getId(), poseDetector);
         reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher().dispatchEvent(event);
       }
     });

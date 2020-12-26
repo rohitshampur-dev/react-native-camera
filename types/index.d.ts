@@ -241,6 +241,7 @@ export interface RNCameraProps {
   onTextRecognized?(response: { textBlocks: TrackedTextFeature[] }): void;
   onLabelsDetected?(response: { labels: ImageLabel[] }): void;
   onObjectsDetected?(response: { objects: DetectedObject[] }): void;
+  onPoseDetected?(response: { pose: Pose }): void;
   // -- ANDROID ONLY PROPS
   /** Android only */
   ratio?: string;
@@ -411,15 +412,50 @@ export interface TrackedTextFeature extends TrackedTextFeatureRecursive {
   components: TrackedTextFeatureRecursive[];
 }
 
-interface ImageLabel {
+export interface ImageLabel {
   text: string;
   confidence: number;
 }
 
-interface DetectedObject {
+export interface DetectedObject {
   frame: any;
   trackingID: number;
   labels?: ImageLabel[];
+}
+export interface Pose {
+  leftShoulder: Point;
+  rightShoulder: Point;
+  leftElbow: Point;
+  rightElbow: Point;
+  leftWrist: Point;
+  rightWrist: Point;
+  leftHip: Point;
+  rightHip: Point;
+  leftKnee: Point;
+  rightKnee: Point;
+  leftAnkle: Point;
+  rightAnkle: Point;
+  leftPinky: Point;
+  rightPinky: Point;
+  leftIndex: Point;
+  rightIndex: Point;
+  leftThumb: Point;
+  rightThumb: Point;
+  leftHeel: Point;
+  rightHeel: Point;
+  leftFootIndex: Point;
+  rightFootIndex: Point;
+  nose: Point;
+  leftEyeInner: Point;
+  leftEye: Point;
+  leftEyeOuter: Point;
+  rightEyeInner: Point;
+  rightEye: Point;
+  rightEyeOuter: Point;
+  leftEar: Point;
+  rightEar: Point;
+  leftMouth: Point;
+  rightMouth: Point;
 }
 
 interface TakePictureOptions {

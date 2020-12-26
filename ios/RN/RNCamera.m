@@ -21,6 +21,7 @@
 @property (nonatomic, strong) id textDetector;
 @property (nonatomic, strong) id faceDetector;
 @property (nonatomic, strong) id objectDetector;
+@property (nonatomic, strong) id poseDetector;
 @property (nonatomic, strong) id labelDetector;
 @property (nonatomic, strong) id barcodeDetector;
 
@@ -34,6 +35,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onFacesDetected;
 @property (nonatomic, copy) RCTDirectEventBlock onLabelsDetected;
 @property (nonatomic, copy) RCTDirectEventBlock onObjectsDetected;
+@property (nonatomic, copy) RCTDirectEventBlock onPoseDetected;
 @property (nonatomic, copy) RCTDirectEventBlock onGoogleVisionBarcodesDetected;
 @property (nonatomic, copy) RCTDirectEventBlock onPictureTaken;
 @property (nonatomic, copy) RCTDirectEventBlock onPictureSaved;
@@ -2274,6 +2276,60 @@ BOOL _sessionInterrupted = NO;
 }
 
 - (void)stopObjectDetection
+{
+    if (self.videoDataOutput && !self.canReadText) {
+        [self.session removeOutput:self.videoDataOutput];
+    }
+    self.videoDataOutput = nil;
+    AVCaptureSessionPreset preset = [self getDefaultPreset];
+    if (self.session.sessionPreset != preset) {
+        [self updateSessionPreset: preset];
+    }
+}
+
+- (void)onObjectsDetected:(NSDictionary *)event
+{
+    if (_onObjectsDetected && _session) {
+        _onObjectsDetected(event);
+    }
+}
+
+# pragma mark - PoseDetectorMlkit
+
+-(id)createPoseDetectorMlKit
+{
+    Class poseDetectorManagerClassMlkit = NSClassFromString(@"PoseDetectorManagerMlkit");
+    return [[poseDetectorManagerClassMlkit alloc] init];
+}
+
+- (void)setupOrDisablePoseDetector
+{
+    if (self.canDetectPose && [self.poseDetector isRealDetector]){
+        AVCaptureSessionPreset preset = [self getDefaultPresetVideo];
+
+        self.session.sessionPreset = preset;
+        if (!self.videoDataOutput) {
+            self.videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
+            if (![self.session canAddOutput:_videoDataOutput]) {
+                NSLog(@"Failed to setup video data output");
+                [self stopPoseDetection];
+                return;
+            }
+
+            NSDictionary *rgbOutputSettings = [NSDictionary
+                dictionaryWithObject:[NSNumber numberWithInt:kCMPixelFormat_32BGRA]
+                                forKey:(id)kCVPixelBufferPixelFormatTypeKey];
+            [self.videoDataOutput setVideoSettings:rgbOutputSettings];
+            [self.videoDataOutput setAlwaysDiscardsLateVideoFrames:YES];
+            [self.videoDataOutput setSampleBufferDelegate:self queue:self.sessionQueue];
+            [self.session addOutput:_videoDataOutput];
+        }
+    } else {
+        [self stopPoseDetection];
+    }
+}
+
+- (void)stopPoseDetection
 {
     if (self.videoDataOutput && !self.canReadText) {
         [self.session removeOutput:self.videoDataOutput];

@@ -914,6 +914,10 @@ export default class Camera extends React.Component<PropsType, StateType> {
       newProps.objectDetectorEnabled = true;
     }
 
+    if (props.onPoseDetected) {
+      newProps.poseDetectorEnabled = true;
+    }
+
     if (props.onTap || props.onDoubleTap) {
       newProps.touchDetectorEnabled = true;
     }
@@ -952,6 +956,7 @@ const RNCamera = requireNativeComponent('RNCamera', Camera, {
     textRecognizerEnabled: true,
     labelDetectorEnabled: true,
     objectDetectorEnabled: true,
+    poseDetectorEnabled: true,
     importantForAccessibility: true,
     onBarCodeRead: true,
     onGoogleVisionBarcodesDetected: true,
