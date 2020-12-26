@@ -12,7 +12,7 @@ import org.reactnative.objectdetector.RNObjectDetector;
 
 public class ObjectDetectionErrorEvent extends Event<ObjectDetectionErrorEvent> {
   private static final Pools.SynchronizedPool<ObjectDetectionErrorEvent> EVENTS_POOL = new Pools.SynchronizedPool<>(3);
-  private RNObjectDetector mobjectDetector;
+  private RNObjectDetector mObjectDetector;
 
   private ObjectDetectionErrorEvent() {
   }
@@ -28,7 +28,7 @@ public class ObjectDetectionErrorEvent extends Event<ObjectDetectionErrorEvent> 
 
   private void init(int viewTag, RNObjectDetector objectDetector) {
     super.init(viewTag);
-    mobjectDetector = objectDetector;
+    mObjectDetector = objectDetector;
   }
 
   @Override
@@ -48,7 +48,7 @@ public class ObjectDetectionErrorEvent extends Event<ObjectDetectionErrorEvent> 
 
   private WritableMap serializeEventData() {
     WritableMap map = Arguments.createMap();
-    map.putBoolean("isOperational", mobjectDetector != null && mobjectDetector.isOperational());
+    map.putBoolean("isOperational", mObjectDetector != null && mObjectDetector.isOperational());
     return map;
   }
 }

@@ -176,8 +176,9 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
         boolean willCallGoogleBarcodeTask = mShouldGoogleDetectBarcodes && !googleBarcodeDetectorTaskLock && cameraView instanceof BarcodeDetectorAsyncTaskDelegate;
         boolean willCallTextTask = mShouldRecognizeText && !textRecognizerTaskLock && cameraView instanceof TextRecognizerAsyncTaskDelegate;
         boolean willCallLabelTask = mShouldDetectLabels && !imageLabelerTaskLock && cameraView instanceof ImageLabelerAsyncTaskDelegate;
+        boolean willCallObjectTask = mShouldDetectObjects && !objectDetectorTaskLock && cameraView instanceof ObjectDetectorAsyncTaskDelegate;
 
-        if (!willCallBarCodeTask && !willCallFaceTask && !willCallGoogleBarcodeTask && !willCallTextTask && !willCallLabelTask) {
+        if (!willCallBarCodeTask && !willCallFaceTask && !willCallGoogleBarcodeTask && !willCallTextTask && !willCallLabelTask && !willCallObjectTask) {
           return;
         }
 
@@ -227,6 +228,12 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
           imageLabelerTaskLock = true;
           ImageLabelerAsyncTaskDelegate delegate = (ImageLabelerAsyncTaskDelegate) cameraView;
           new ImageLabelerAsyncTask(delegate, mImageLabeler, data, width, height, correctRotation, getResources().getDisplayMetrics().density, getFacing(), getWidth(), getHeight(), mPaddingX, mPaddingY).execute();
+        }
+
+        if (willCallObjectTask) {
+          objectDetectorTaskLock = true;
+          ObjectDetectorAsyncTaskDelegate delegate = (ObjectDetectorAsyncTaskDelegate) cameraView;
+          new ObjectDetectorAsyncTask(delegate, mObjectDetector, data, width, height, correctRotation, getResources().getDisplayMetrics().density, getFacing(), getWidth(), getHeight(), mPaddingX, mPaddingY).execute();
         }
       }
     });
