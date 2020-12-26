@@ -227,6 +227,12 @@ type ImageLabel = {
   confidence: number,
 };
 
+type DetectedObject = {
+  frame: any;
+  trackingID: number;
+  labels?: ImageLabel[]
+}
+
 type RecordingOptions = {
   maxDuration?: number,
   maxFileSize?: number,
@@ -294,6 +300,7 @@ type PropsType = typeof View.props & {
   onFacesDetected?: ({ faces: Array<TrackedFaceFeature> }) => void,
   onTextRecognized?: ({ textBlocks: Array<TrackedTextFeature> }) => void,
   onLabelsDetected?: ({ labels: Array<ImageLabel> }) => void,
+  onObjectsDetected?: ({ objects: Array<DetectedObject> }) => void,
   captureAudio?: boolean,
   keepAudioSession?: boolean,
   useCamera2Api?: boolean,
@@ -429,6 +436,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     onFacesDetected: PropTypes.func,
     onTextRecognized: PropTypes.func,
     onLabelsDetected: PropTypes.func,
+    onObjectsDetected: PropTypes.func,
     onSubjectAreaChanged: PropTypes.func,
     trackingEnabled: PropTypes.bool,
     faceDetectionMode: PropTypes.number,
@@ -868,6 +876,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
             onTouch={this._onTouch}
             onFacesDetected={this._onObjectDetected(this.props.onFacesDetected)}
             onLabelsDetected={this._onObjectDetected(this.props.onLabelsDetected)}
+            onObjectsDetected={this._onObjectDetected(this.props.onObjectsDetected)}
             onTextRecognized={this._onObjectDetected(this.props.onTextRecognized)}
             onPictureSaved={this._onPictureSaved}
             onSubjectAreaChanged={this._onSubjectAreaChanged}
@@ -899,6 +908,10 @@ export default class Camera extends React.Component<PropsType, StateType> {
 
     if (props.onLabelsDetected) {
       newProps.labelDetectorEnabled = true;
+    }
+
+    if (props.onObjectsDetected) {
+      newProps.objectDetectorEnabled = true;
     }
 
     if (props.onTap || props.onDoubleTap) {
@@ -938,6 +951,7 @@ const RNCamera = requireNativeComponent('RNCamera', Camera, {
     faceDetectorEnabled: true,
     textRecognizerEnabled: true,
     labelDetectorEnabled: true,
+    objectDetectorEnabled: true,
     importantForAccessibility: true,
     onBarCodeRead: true,
     onGoogleVisionBarcodesDetected: true,
@@ -947,6 +961,7 @@ const RNCamera = requireNativeComponent('RNCamera', Camera, {
     onPictureSaved: true,
     onFaceDetected: true,
     onLabelsDetected: true,
+    onObjectsDetected: true,
     onTouch: true,
     onLayout: true,
     onMountError: true,

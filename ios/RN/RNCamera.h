@@ -6,6 +6,7 @@
 #import "FaceDetectorManagerMlkit.h"
 #import "BarcodeDetectorManagerMlkit.h"
 #import "LabelDetectorManagerMlkit.h"
+#import "ObjectDetectorManagerMlkit.h"
 #import "TextDetectorManager.h"
 
 @class RNCamera;
@@ -50,6 +51,7 @@
 @property(nonatomic, assign) BOOL canDetectFaces;
 @property(nonatomic, assign) BOOL canDetectBarcodes;
 @property(nonatomic, assign) BOOL canDetectLabels;
+@property(nonatomic, assign) BOOL canDetectObjects;
 @property(nonatomic, assign) BOOL captureAudio;
 @property(nonatomic, assign) BOOL keepAudioSession;
 @property(nonatomic, assign) BOOL useNativeZoom;
@@ -104,11 +106,13 @@
 - (void)setupOrDisableFaceDetector;
 - (void)setupOrDisableBarcodeDetector;
 - (void)setupOrDisableLabelDetector;
+- (void)setupOrDisableObjectDetector;
 - (void)onReady:(NSDictionary *)event;
 - (void)onMountingError:(NSDictionary *)event;
 - (void)onCodeRead:(NSDictionary *)event;
 - (void)onFacesDetected:(NSDictionary *)event;
 - (void)onLabelsDetected:(NSDictionary *)event;
+- (void)onObjectsDetected:(NSDictionary *)event;
 - (void)onPictureTaken:(NSDictionary *)event;
 - (void)onPictureSaved:(NSDictionary *)event;
 - (void)onRecordingStart:(NSDictionary *)event;
