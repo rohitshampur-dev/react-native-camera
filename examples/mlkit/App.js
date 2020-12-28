@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Slider } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Slider, SafeAreaView } from 'react-native';
 // eslint-disable-next-line import/no-unresolved
 import { RNCamera } from 'react-native-camera';
 
@@ -445,7 +445,7 @@ export default class CameraScreen extends React.Component {
   }
 
   render() {
-    return <View style={styles.container}>{this.renderCamera()}</View>;
+    return <SafeAreaView style={styles.container}>{this.renderCamera()}</SafeAreaView>;
   }
 }
 
