@@ -41,6 +41,7 @@ export default class CameraScreen extends React.Component {
     canDetectText: false,
     canDetectBarcode: false,
     canDetectLabels: false,
+    canDetectPose: false,
     faces: [],
     textBlocks: [],
     barcodes: [],
@@ -253,7 +254,13 @@ export default class CameraScreen extends React.Component {
   );
 
   renderCamera() {
-    const { canDetectFaces, canDetectText, canDetectBarcode, canDetectLabels } = this.state;
+    const {
+      canDetectFaces,
+      canDetectText,
+      canDetectBarcode,
+      canDetectLabels,
+      canDetectPose,
+    } = this.state;
     return (
       <RNCamera
         ref={ref => {
@@ -342,6 +349,11 @@ export default class CameraScreen extends React.Component {
             <TouchableOpacity onPress={this.toggle('canDetectLabels')} style={styles.flipButton}>
               <Text style={styles.detectText}>
                 {!canDetectLabels ? 'Detect Labels' : 'Detecting Labels'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.toggle('canDetectPose')} style={styles.flipButton}>
+              <Text style={styles.detectText}>
+                {!canDetectPose ? 'Detect Pose' : 'Detecting Pose'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -445,7 +457,7 @@ const styles = StyleSheet.create({
   },
   flipButton: {
     flex: 0.3,
-    height: 40,
+    minHeight: 40,
     marginHorizontal: 2,
     marginBottom: 10,
     marginTop: 10,
