@@ -64,7 +64,6 @@ public class RNCameraView extends CameraView implements LifecycleEventListener, 
   public volatile boolean faceDetectorTaskLock = false;
   public volatile boolean googleBarcodeDetectorTaskLock = false;
   public volatile boolean textRecognizerTaskLock = false;
-  public volatile boolean imageLabelerTaskLock = false;
 
   // Scanning-related properties
   private MultiFormatReader mMultiFormatReader;
